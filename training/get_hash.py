@@ -9,15 +9,27 @@ class HashTable:
             h += ord(char)
         return h % 100
     
-    def add(self, key, val):
+    # def add(self, key, val):
+    #     h = self.get_hash(key)
+    #     self.arr[h] = val
+    
+    # def get(self, key):
+    #     h = self.get_hash(key)
+    #     return self.arr[h]
+    
+    # def delete(self, key):
+    #     h = self.get_hash(key)
+    #     self.arr[h] = None
+
+    def __setitem__(self, key, val):
         h = self.get_hash(key)
         self.arr[h] = val
-    
-    def get(self, key):
+
+    def __getitem__(self, key):
         h = self.get_hash(key)
         return self.arr[h]
-    
-    def delete(self, key):
+
+    def __delitem__(self, key):
         h = self.get_hash(key)
         self.arr[h] = None
 
@@ -26,3 +38,9 @@ t = HashTable()
 print(t.get_hash('vlad'))
 print(t.get_hash('vasya'))
 print(t.get_hash('vova'))
+
+t['march6'] = 130
+print(t['march6'])
+del t['march6']
+
+print(t.arr)

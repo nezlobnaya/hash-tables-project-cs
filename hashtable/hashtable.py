@@ -23,7 +23,7 @@ class HashTable:
     def __init__(self, capacity):
         # Your code here
         self.capacity = capacity
-        self.size = 0 #entries
+        self.size = 0 #entriess
         self.buckets = [None] * self.capacity #data
 
     def get_num_slots(self):
@@ -94,17 +94,22 @@ class HashTable:
         Implement this.
         """
         # Your code here
+      
         self.size += 1
         index = self.hash_index(key)
         node = self.buckets[index]
         if node is None:
             self.buckets[index] = HashTableEntry(key, value)
+            if self.get_load_factor() > 0.7:
+                self.resize(self.capacity * 2)
             return
-        prev = node
-        while node is not None:
-            prev = node
-            node = node.next
-        prev.next = HashTableEntry(key, value)
+        elif node.key is key:
+            node.value = value
+        else:
+            self.buckets[index] = HashTableEntry(key, value)
+            node.next = node
+            if self.get_load_factor() > 0.7:
+                self.resize(self.capacity * 2)
 
 
     def delete(self, key):
@@ -118,7 +123,8 @@ class HashTable:
         # Your code here
         index = self.hash_index(key)
         node = self.buckets[index]
-        while HashTableEntry is not None and node.key != key:
+        prev = None
+        while node is not None and node.key != key:
             prev = node
             node = node.next
         if node is None:
@@ -128,10 +134,11 @@ class HashTable:
             self.size -= 1
             result = node.value
             if prev is None:
-                node = None
+                self.buckets[index] = node.next
             else:
                 prev.next = prev.next.next
-            return result 
+            return result
+
 
     def get(self, key):
         """

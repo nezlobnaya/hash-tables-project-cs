@@ -124,8 +124,6 @@ class HashTable:
         if node is None:
             # Create node, add it, return
             self.buckets[index] = HashTableEntry(key, value)
-            if self.get_load_factor() > 0.7:
-                self.resize(self.capacity * 2)
             return
         #hash collisions handled with Linked List Chaining.
         elif node.key is key:
@@ -137,8 +135,11 @@ class HashTable:
             node = node.next
             # Add a new node at the end of the list with provided key/value
         prev.next = HashTableEntry(key, value)
+        # When load factor increases above `0.7`, automatically rehash the
+        # table to double its previous size.
         if self.get_load_factor() > 0.7:
             self.resize(self.capacity * 2)
+       
 
 
     def delete(self, key):
@@ -170,6 +171,10 @@ class HashTable:
                 self.buckets[index] = node.next # May be None, or the next match
             else:
                 prev.next = prev.next.next # LinkedList delete by skipping over
+            # When load factor decreases below `0.2`, automatically rehash
+            # the table to half its previous size, down to a minimum of 8 slots.
+            if self.get_load_factor() < 0.2:
+                self.resize(MIN_CAPACITY)
             return result
 
 

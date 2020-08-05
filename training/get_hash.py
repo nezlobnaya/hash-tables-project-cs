@@ -35,9 +35,9 @@ class HashTable:
 
 t = HashTable()
 
-print(t.get_hash('vlad'))
-print(t.get_hash('vasya'))
-print(t.get_hash('vova'))
+t.get_hash('vlad')
+t.get_hash('vasya')
+t.get_hash('vova')
 
 t['march6'] = 130
 print(t['march6'])

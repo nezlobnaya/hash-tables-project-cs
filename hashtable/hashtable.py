@@ -174,7 +174,7 @@ class HashTable:
             # When load factor decreases below `0.2`, automatically rehash
             # the table to half its previous size, down to a minimum of 8 slots.
             if self.get_load_factor() < 0.2:
-                self.resize(MIN_CAPACITY)
+                self.downsize(MIN_CAPACITY)
             return result
 
 
@@ -219,6 +219,9 @@ class HashTable:
                         new_ht.put(current.key, current.value)
         self.buckets = new_ht.buckets
         self.capacity = new_ht.capacity
+    
+    def downsize(self, old_capacity):
+        pass
 
 
 if __name__ == "__main__":

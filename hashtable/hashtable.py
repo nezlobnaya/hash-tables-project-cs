@@ -38,7 +38,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        return len(self.buckets)
+        return self.capacity
 
     def get_load_factor(self):
         """
@@ -115,7 +115,7 @@ class HashTable:
         """
         # Your code here
         # 1. Increment size
-        self.size += 1
+        
         # 2. Compute index of key
         index = self.hash_index(key)
         # Go to the node corresponding to the hash index
@@ -123,18 +123,21 @@ class HashTable:
         # 3. If bucket is empty:
         if node is None:
             # Create node, add it, return
+            self.size += 1
             self.buckets[index] = HashTableEntry(key, value)
             return
         #hash collisions handled with Linked List Chaining.
         elif node.key is key:
-            node.value = value
+            node.value = value #if there is a collision replace the value
+            return
         # 4. Iterate to the end of the linked list at provided index
-        prev = node
+        # prev = node
         while node is not None:
             prev = node
             node = node.next
             # Add a new node at the end of the list with provided key/value
         prev.next = HashTableEntry(key, value)
+        self.size += 1
         # When load factor increases above `0.7`, automatically rehash the
         # table to double its previous size.
         if self.get_load_factor() > 0.7:
@@ -161,7 +164,7 @@ class HashTable:
             node = node.next
         # Now, node is either the requested node or none
         if node is None:
-            print("Key is not found!")
+            print(f"Warning {key} not found in Hash Table")
             return None
         else:
             self.size -= 1
@@ -170,7 +173,7 @@ class HashTable:
             if prev is None:
                 self.buckets[index] = node.next # May be None, or the next match
             else:
-                prev.next = prev.next.next # LinkedList delete by skipping over
+                prev.next = node.next # LinkedList delete by skipping over
             # When load factor decreases below `0.2`, automatically rehash
             # the table to half its previous size, down to a minimum of 8 slots.
             if self.get_load_factor() < 0.2:
@@ -245,6 +248,8 @@ if __name__ == "__main__":
     # Test storing beyond capacity
     for i in range(1, 13):
         print(ht.get(f"line_{i}"))
+
+
 
     # Test resizing
     old_capacity = ht.get_num_slots()

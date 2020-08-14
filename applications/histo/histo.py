@@ -7,7 +7,7 @@ def hist(s):
     counts = {}
     s = s.lower()
     # get rid of punctuation
-    s = re.sub(r'[^\w\s]','', s)
+    s = re.sub(r'[^\w\s]','', s) #regular expression replacement with re.sub
     # iterate through each word in the sentence using split
     for word in s.split():
         # if it's the first time seeing the key
